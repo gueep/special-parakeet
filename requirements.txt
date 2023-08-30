@@ -1,0 +1,3 @@
+hashlib==20081119
+argparse==1.4.0
+concurrent.futures==3.11.1
