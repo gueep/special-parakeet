@@ -33,9 +33,9 @@ def main():
     print(banner)
 
     parser = argparse.ArgumentParser(description="Hash comparison tool")
-    parser.add_argument("-w", "--wordlist", type=str, help="Path to wordlist file")
-    parser.add_argument("-d", "--definitions", type=str, help="Path to definitions file")
-    parser.add_argument("-h", "--target_hash", type=str, help="Target hash to compare")
+    parser.add_argument("-w", "--wordlist", type=str, help="Path to wordlist file (hashes)")
+    parser.add_argument("-d", "--definitions", type=str, help="Path to definitions file (plain passwords)")
+    parser.add_argument("-t", "--target_hash", type=str, help="Target hash to compare")
     parser.add_argument("-c", "--hash_type", choices=SUPPORTED_ALGORITHMS, help="Type of hash")
     parser.add_argument("-m", "--multithread", action="store_true", help="Enable multithreading")
 
@@ -71,15 +71,13 @@ def main():
 
             result = compare_hashes(args.target_hash, hash_list)
             if result:
-                print(f"Found a match: {result}:{definitions.get(result, 'No definition available')}")
-            else:
-                print("No match found.")
+                if definitions.get(result) is not None:
+                    print(f"Found a match: {result}:{definitions[result]}")
+                else:
+                    print(f"Found a match: {result}")
 
         except Exception as e:
             print(f"An error occurred: {e}")
 
-    if any("Motdepasse" in key for key in hash_list):
-        print("An error occurred during hashing the password.")
-    
 if __name__ == "__main__":
     main()
